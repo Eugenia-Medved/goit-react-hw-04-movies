@@ -8,7 +8,8 @@ import './App.css';
 
 import AppBar from 'components/AppBar';
 import NotFoundView from '../../views/NotFoundView';
-import HomePage from '../../views/HomePage';
+
+const HomePage = lazy(() => import('../../views/HomePage' /* webpackChunkName: "home-page" */));
 
 const MoviesPage = lazy(() =>
   import('../../views/MoviesPage' /* webpackChunkName: "movies-page" */),

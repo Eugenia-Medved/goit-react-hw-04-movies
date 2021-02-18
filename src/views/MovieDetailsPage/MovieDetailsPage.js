@@ -1,10 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, lazy } from 'react';
 import { NavLink, Route, Switch } from 'react-router-dom';
 
 import MoviesDetailsAPI from '../../services/MoviesDetailsAPI';
-import Cast from '../../components/Cast/Cast';
-import Reviews from '../../components/Reviews/Reviews';
+
 import s from './MovieDetailsPage.module.css';
+
+const Cast = lazy(() =>
+  import('../../components/Cast/Cast' /* webpackChunkName: "cost-component" */),
+);
+const Reviews = lazy(() =>
+  import('../../components/Reviews/Reviews' /* webpackChunkName: "reviews-component" */),
+);
 
 class MovieDetailsPage extends Component {
   state = {
@@ -35,6 +41,7 @@ class MovieDetailsPage extends Component {
     if (location.state && location.state.from) {
       return history.push(location.state.from);
     }
+
     history.push('/movies');
   };
 
@@ -43,6 +50,7 @@ class MovieDetailsPage extends Component {
     const posterURL = `https://image.tmdb.org/t/p/w400${posterPath}`;
     const year = new Date(date).getFullYear();
     const { url, path } = this.props.match;
+    const { from } = this.props.location.state;
 
     return (
       <>
@@ -76,13 +84,18 @@ class MovieDetailsPage extends Component {
 
         <h3>Additional information</h3>
         <div className={s.container}>
-          <NavLink exact to={`${url}/cast`} className={s.NavLink} activeClassName={s.NavLinkActive}>
+          <NavLink
+            exact
+            to={{ pathname: `${url}/cast`, state: { from } }}
+            className={s.NavLink}
+            activeClassName={s.NavLinkActive}
+          >
             Cast
           </NavLink>
 
           <NavLink
             exact
-            to={`${url}/reviews`}
+            to={{ pathname: `${url}/reviews`, state: { from } }}
             className={s.NavLink}
             activeClassName={s.NavLinkActive}
           >
